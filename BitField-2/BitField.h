@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <stdint.h>
+using namespace std;
 
 class BitField {
 private:
@@ -27,7 +28,5 @@ public:
     bool operator==(const BitField& tmp) const;
     BitField operator~();
 
-    ~BitField(){
-
-    }
+    ~BitField();
 };
