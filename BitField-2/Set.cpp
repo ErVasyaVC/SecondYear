@@ -1,4 +1,5 @@
 #include "Set.h"
+#include <cmath>     
 
 
 Set::Set(size_t mp) : _bitField(mp) {

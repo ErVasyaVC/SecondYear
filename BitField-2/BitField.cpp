@@ -1,4 +1,5 @@
 #include "BitField.h"
+#include <cstring>
 
 
 size_t BitField::GetMemIndex(size_t n) const{
@@ -21,6 +22,7 @@ BitField::BitField(const BitField& tmp) {
     _sizeBit = tmp._sizeBit;
     _memSize = tmp._memSize;
     _mem = new uint16_t[_memSize];
+
     memcpy(_mem, tmp._mem, _memSize * sizeof(uint16_t));
 }
 
