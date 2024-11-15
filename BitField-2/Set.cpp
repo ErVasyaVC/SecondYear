@@ -50,8 +50,7 @@ Set Set::operator+ (const Set &s){
     return ss;
 }
 Set Set::operator* (const Set &s){
-    Set ss(max(s._maxPower, _maxPower));
-    ss._bitField = _bitField & s._bitField;
+    Set ss(_bitField & s._bitField);
     return ss;
 }
 Set Set::operator~ (){
@@ -60,5 +59,23 @@ Set Set::operator~ (){
     return ss;
 }
 std::vector<uint64_t> Set::GetPrimary(){
-    return std::vector<uint64_t>();
+    Set s(*this);
+    
+    size_t max_power = GetMaxPower();
+    size_t sqrtn = static_cast<size_t> (sqrt (max_power)) + 1;
+    for (size_t i = 2; i < sqrtn; i ++){
+        if (i != 0){
+            for (size_t j = i + i; j < max_power; j += i){
+                s._bitField.ClrBit(j);
+                }
+            }
+    }
+    std::vector<uint64_t> ss;
+    ss.push_back(1);
+    for(size_t i = 2; i < max_power; i++){
+        if(s._bitField.GetBit(i)){
+            ss.push_back(i);
+        }
+    }
+    return ss;
 }

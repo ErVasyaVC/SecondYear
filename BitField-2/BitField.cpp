@@ -27,10 +27,11 @@ BitField::BitField(const BitField& tmp) {
 BitField& BitField::operator=(const BitField& tmp) {
     if(_memSize != tmp._memSize){
         delete [] _mem;
-        _sizeBit = tmp._sizeBit;
+        
         _memSize = tmp._memSize;
         _mem = new uint16_t[_memSize];
     }
+    _sizeBit = tmp._sizeBit;
     memcpy(_mem, tmp._mem, _memSize * sizeof(uint16_t));
     return *this;
 }
@@ -39,13 +40,13 @@ size_t BitField::GetLength() const {
     return _sizeBit;
 }
 void BitField::SetBit(size_t n) {
-    _mem[GetMemIndex(n)] |= GetBit(n);
+    _mem[GetMemIndex(n)] |= GetMask(n);
 }
 void BitField::ClrBit(size_t n) {
-     _mem[GetMemIndex(n)] &= ~GetBit(n);
+     _mem[GetMemIndex(n)] &= ~GetMask(n);
 }
 uint8_t BitField::GetBit(size_t n) const {
-    return (_mem[GetMemIndex(n)] & GetBit(n)) != 0;
+    return (_mem[GetMemIndex(n)] & GetMask(n)) != 0;
 }
 BitField BitField::operator|(const BitField& tmp) {
     BitField B(*this);
@@ -56,10 +57,18 @@ BitField BitField::operator|(const BitField& tmp) {
 }
 
 BitField BitField::operator&(const BitField& tmp) {
-    BitField B(*this);
-    for (size_t i = 0; i < _memSize; i++){
-        B._mem[i] |= tmp._mem[i];
+    BitField B (*this);
+    if(GetLength() > tmp.GetLength()){
+        for (size_t i = 0; i < (tmp._memSize); i++){
+            B._mem[i]  |= tmp._mem[i];
+        }
+    } else {
+        BitField B(tmp);
+        for (size_t i = 0; i < (_memSize); i++){
+            B._mem[i]  |= tmp._mem[i];
+        }
     }
+    
     return B;
 }
 BitField BitField::operator^(const BitField& tmp) {
@@ -71,15 +80,16 @@ BitField BitField::operator^(const BitField& tmp) {
 }
 bool BitField::operator==(const BitField& tmp) const{
     for (size_t i = 0; i < _memSize; i++){
-        if(_mem[i] != tmp._mem[i]);
+        if(_mem[i] != tmp._mem[i]){
             return false;
+            }
 
     }
     return true;
 }
 BitField BitField::operator~(){
     BitField B(*this);
-    for (int i = 0; 1 < _sizeBit; i++){
+    for (size_t i = 0; i < _sizeBit; i++){
         if (GetBit(i)){
             B.ClrBit(i);
         } else {
