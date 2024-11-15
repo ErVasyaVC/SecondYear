@@ -55,6 +55,7 @@ BitField BitField::operator|(const BitField& tmp) {
     for (size_t i = 0; i < _memSize; i++){
         B._mem[i] = _mem[i] | tmp._mem[i];
     }
+    
     return B;
 }
 
