@@ -13,12 +13,16 @@ private:
     uint16_t GetMask(size_t n) const;
 public:
     BitField(size_t len);
+    BitField(size_t t, bool s);
     BitField(const BitField& tmp);
     BitField& operator=(const BitField& tmp);
-    
+
     size_t GetLength() const;
     void SetBit(size_t n);
     void ClrBit(size_t n);
+
+    void SizeT(size_t t);
+
     uint8_t GetBit(size_t n) const;
 
 
@@ -28,5 +32,9 @@ public:
     bool operator==(const BitField& tmp) const;
     BitField operator~();
 
+    
+
     ~BitField();
 };
+
+ostream& operator<<(ostream &out, const BitField& tmp);
